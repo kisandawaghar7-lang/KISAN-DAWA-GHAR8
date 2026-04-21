@@ -155,7 +155,9 @@
             <div id="map"></div>
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
                 <a href="tel:+918005135353" id="call-btn" class="btn" style="background: var(--primary); color: white;"><i class="fas fa-phone-alt"></i> Call Store</a>
-                <a href="http://googleusercontent.com/maps.google.com/6" id="route-btn" target="_blank" class="btn" style="background: white; border: 2px solid var(--primary); color: var(--primary);"><i class="fas fa-map-marker-alt"></i> Get Route</a>
+                <a href="https://www.google.com/maps/dir/?api=1&destination=26.9696,83.5916" id="route-btn" target="_blank" rel="noopener noreferrer" class="btn" style="background: white; border: 2px solid var(--primary); color: var(--primary);">
+                    <i class="fas fa-map-marker-alt"></i> Get Route
+                </a>
             </div>
 
             <div class="legal-box" id="legal-content">
@@ -244,7 +246,12 @@
                 chipBox.appendChild(div);
             });
 
-            if(!map) { addRow(); initMap(); }
+            if(!map) { 
+                addRow(); 
+                initMap(); 
+            } else {
+                setTimeout(() => map.invalidateSize(), 200);
+            }
             calculate();
         }
 
@@ -293,9 +300,10 @@
         }
 
         function initMap() {
-            map = L.map('map', { zoomControl: false }).setView([26.9697, 83.4754], 14);
+            // Using precise store coordinates from Maps
+            map = L.map('map', { zoomControl: false }).setView([26.9696, 83.5916], 14);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-            marker = L.marker([26.9697, 83.4754], {draggable: true}).addTo(map);
+            marker = L.marker([26.9696, 83.5916], {draggable: true}).addTo(map);
         }
 
         function orderByName() {
@@ -305,13 +313,28 @@
                 const q = row.querySelector('.m-qty').value;
                 if(n) meds += `• ${n} (${q})\n`;
             });
+            
+            if(!meds) {
+                alert(currentLang === 'hi' ? "कृपया दवा जोड़ें" : "Please add medicine");
+                return;
+            }
+
             const latlng = marker.getLatLng();
-            const msg = `*NEW ORDER*\n\n${meds}\n💊 Items: ${document.getElementById('bill-items-total').innerText}\n🚚 Delivery: ${document.getElementById('bill-delivery-charge').innerText}\n💰 *Final Total: ${document.getElementById('bill-grand-total').innerText}*\n📍 Location: http://googleusercontent.com/maps.google.com/6{latlng.lat},${latlng.lng}`;
-            window.open(`https://wa.me/918005135353?text=${encodeURIComponent(msg)}`, '_blank');
+            // Secure universal Google Maps format for location sharing
+            const mapUrl = `https://www.google.com/maps?q=${latlng.lat},${latlng.lng}`;
+            
+            const msg = `*NEW ORDER - KISAN DAWA GHAR*\n\n` +
+                        `${meds}\n` +
+                        `💊 Items Total: ${document.getElementById('bill-items-total').innerText}\n` +
+                        `🚚 Delivery: ${document.getElementById('bill-delivery-charge').innerText}\n` +
+                        `💰 *Final Amount: ${document.getElementById('bill-grand-total').innerText}*\n\n` +
+                        `📍 *My Delivery Location:* \n${mapUrl}`;
+
+            window.open(`https://wa.me/918005135353?text=${encodeURIComponent(msg)}`, '_blank', 'noopener,noreferrer');
         }
 
-        function orderByRx() { window.open(`https://wa.me/918005135353?text=I want to order via prescription`, '_blank'); }
-        function orderRefill() { window.open(`https://wa.me/918005135353?text=Monthly Refill Request`, '_blank'); }
+        function orderByRx() { window.open(`https://wa.me/918005135353?text=I want to order via prescription.`, '_blank', 'noopener,noreferrer'); }
+        function orderRefill() { window.open(`https://wa.me/918005135353?text=Monthly Medicine Refill request.`, '_blank', 'noopener,noreferrer'); }
     </script>
 </body>
 </html>
