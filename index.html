@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#2563eb">
+    <title>KISAN DAWA GHAR</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Hind:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --success: #16a34a;
+            --warning: #f59e0b;
+            --bg: #f1f5f9;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-sub: #475569;
+            --refill: #7c3aed;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; }
+        .hi-font { font-family: 'Hind', sans-serif !important; }
+
+        .status-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.2); color: white; padding: 6px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 15px; backdrop-filter: blur(5px); }
+        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; position: relative; }
+        .pulse-dot::after { content: ""; position: absolute; width: 100%; height: 100%; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
+
+        .overlay { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 10000; }
+        .overlay-card { background: white; padding: 40px 30px; border-radius: 32px; text-align: center; width: 92%; max-width: 380px; }
+        .lang-btn { width: 100%; padding: 18px; border: 2px solid #e2e8f0; border-radius: 20px; background: white; color: var(--primary); font-weight: 800; font-size: 16px; margin-top: 15px; cursor: pointer; }
+
+        .medical-card { display: none; width: 100%; max-width: 500px; margin: 0 auto; background: var(--bg); min-height: 100vh; position: relative; padding-bottom: 40px; }
+        
+        header { 
+            background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%); 
+            padding: 40px 20px 100px; text-align: center; color: white;
+            border-bottom-left-radius: 50px; border-bottom-right-radius: 50px;
+        }
+        header h1 { font-size: 26px; font-weight: 800; }
+
+        .trust-bar { 
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
+            width: 90%; margin: -45px auto 25px; padding: 20px 10px;
+            border-radius: 24px; display: flex; justify-content: space-around;
+            font-size: 11px; font-weight: 700; color: var(--text-sub); 
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); z-index: 10; position: relative;
+        }
+
+        .content { padding: 0 20px; }
+
+        .info-strip { background: #fffbeb; border: 1px solid #fde68a; padding: 12px 15px; border-radius: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .info-strip i { color: var(--warning); font-size: 18px; }
+        .info-strip div { flex-grow: 1; margin-left: 12px; }
+        .info-strip b { font-size: 14px; color: #92400e; display: block; }
+        .info-strip span { font-size: 11px; color: #b45309; font-weight: 600; }
+
+        .delivery-banner { background: #f0fdf4; border: 1px solid #22c55e; padding: 15px; border-radius: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+        .delivery-banner i { color: #22c55e; font-size: 20px; }
+        .delivery-banner b { display: block; font-size: 14px; color: #166534; }
+        .delivery-banner span { font-size: 11px; color: #15803d; font-weight: 600; }
+
+        .order-section { background: white; padding: 20px; border-radius: 24px; border: 1px solid #e2e8f0; margin-bottom: 15px; }
+        .section-title { font-size: 14px; font-weight: 800; color: var(--text-sub); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        
+        .input-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 15px; }
+        .med-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
+        
+        .btn { width: 100%; padding: 18px; border-radius: 22px; font-weight: 800; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: 0.3s; text-decoration: none; }
+        .whatsapp-btn { background: var(--success); color: white; }
+        .rx-btn { background: #6366f1; color: white; }
+        .refill-btn { background: var(--refill); color: white; }
+        .help-btn { background: #f8fafc; border: 2px solid #3b82f6 !important; color: #1e40af; margin-top: 10px; }
+
+        #map { height: 180px; width: 100%; border-radius: 28px; margin: 20px 0; border: 1px solid #e2e8f0; }
+        footer { text-align: center; padding: 40px 20px; color: var(--text-sub); font-size: 12px; border-top: 1px solid #e2e8f0; }
+    </style>
+</head>
+<body>
+
+    <div id="language-overlay" class="overlay">
+        <div class="overlay-card">
+            <h2 style="margin-bottom: 10px">KISAN DAWA GHAR</h2>
+            <button onclick="setLanguage('hi')" class="lang-btn hi-font">हिन्दी (Hindi)</button>
+            <button onclick="setLanguage('en')" class="lang-btn">English</button>
+        </div>
+    </div>
+
+    <div id="main-site" class="medical-card">
+        <header>
+            <div class="status-badge">
+                <span class="pulse-dot"></span> <span id="ds-pulse">Online Now</span>
+            </div>
+            <h1>KISAN DAWA GHAR</h1>
+            <p id="tagline" style="opacity:0.9; font-size: 14px;">Certified Pharmacy & Healthcare</p>
+        </header>
+
+        <div class="trust-bar">
+            <span><i class="fas fa-certificate" style="color:#3b82f6"></i> <span id="t1">100% Genuine</span></span>
+            <span><i class="fas fa-truck" style="color:#f59e0b"></i> <span id="t2">Home Delivery</span></span>
+        </div>
+
+        <div class="content">
+            
+            <div class="info-strip">
+                <i class="fas fa-shopping-basket"></i>
+                <div><b id="min-label">Minimum Order: ₹299</b><span id="min-sub">+ Delivery Charge Applicable</span></div>
+            </div>
+
+            <div class="delivery-banner">
+                <i class="fas fa-truck-loading"></i>
+                <div><b id="fd-msg">FREE Delivery Offer</b><span id="fd-sub">Applicable on orders above ₹999</span></div>
+            </div>
+
+            <div class="order-section">
+                <div class="section-title"><i class="fas fa-pen-nib"></i> <span id="s1-title">Order by Name</span></div>
+                <div class="input-row">
+                    <input type="text" id="m-name" class="med-input" placeholder="Medicine Name">
+                    <input type="text" id="m-qty" class="med-input" placeholder="Qty">
+                </div>
+                <button onclick="orderByName()" class="btn whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> <span id="btn-n">Order Now</span>
+                </button>
+            </div>
+
+            <div class="order-section">
+                <div class="section-title"><i class="fas fa-file-medical"></i> <span id="s2-title">Order by Prescription</span></div>
+                <button onclick="orderByRx()" class="btn rx-btn">
+                    <i class="fab fa-whatsapp"></i> <span id="btn-rx">Send Prescription</span>
+                </button>
+            </div>
+
+            <div class="order-section">
+                <div class="section-title"><i class="fas fa-calendar-alt"></i> <span id="s3-title">Monthly Refill</span></div>
+                <button onclick="orderRefill()" class="btn refill-btn">
+                    <i class="fas fa-sync-alt"></i> <span id="btn-refill">Order Monthly Refill</span>
+                </button>
+            </div>
+
+            <a href="tel:+918005135353" class="btn help-btn">
+                <i class="fas fa-user-md"></i> <span id="btn-help">Help Ordering: Call Pharmacist</span>
+            </a>
+
+            <div id="map"></div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
+                <a href="tel:+918005135353" class="btn" style="background: var(--primary); color: white;"><i class="fas fa-phone-alt"></i> Call</a>
+                <a href="https://maps.app.goo.gl/DxZPygrPVfeR9p167" target="_blank" class="btn" style="background: white; border: 2px solid var(--primary); color: var(--primary);"><i class="fas fa-map-marker-alt"></i> Route</a>
+            </div>
+        </div>
+
+        <footer>
+            <p><strong>KISAN DAWA GHAR</strong></p>
+            <p>Partawal Chowk, Maharajganj, UP</p>
+        </footer>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let map, marker;
+        const shopPhone = "918005135353";
+        const shopCoords = [26.9697, 83.4754]; 
+        const shopLink = "https://maps.app.goo.gl/DxZPygrPVfeR9p167";
+
+        const trans = {
+            'en': {
+                'ds-pulse': 'Online Now', 'tagline': 'Certified Pharmacy & Healthcare',
+                'min-label': 'Minimum Order: ₹299', 'min-sub': '+ Delivery Charge Applicable',
+                's1-title': 'Order by Name', 's2-title': 'Order by Prescription', 's3-title': 'Monthly Refill',
+                'btn-n': 'Order Now', 'btn-rx': 'Send Prescription', 'btn-refill': 'Order Monthly Refill',
+                'btn-help': 'Help Ordering: Call Pharmacist',
+                'fd-msg': 'FREE Delivery Offer', 'm-n': 'Medicine Name', 'm-q': 'Qty'
+            },
+            'hi': {
+                'ds-pulse': 'अभी ऑनलाइन है', 'tagline': 'प्रमाणित फार्मेसी और हेल्थकेयर',
+                'min-label': 'न्यूनतम ऑर्डर: ₹299', 'min-sub': '+ डिलीवरी शुल्क लागू',
+                's1-title': 'नाम से ऑर्डर करें', 's2-title': 'पर्चे से ऑर्डर करें', 's3-title': 'मंथली रिफिल',
+                'btn-n': 'अभी ऑर्डर करें', 'btn-rx': 'पर्चा भेजें', 'btn-refill': 'मंथली रिफिल ऑर्डर करें',
+                'btn-help': 'ऑर्डर सहायता: फार्मासिस्ट को कॉल करें',
+                'fd-msg': 'फ्री डिलीवरी ऑफर', 'm-n': 'दवा का नाम', 'm-q': 'मात्रा'
+            }
+        };
+
+        function setLanguage(lang) {
+            document.getElementById('language-overlay').style.display = 'none';
+            document.getElementById('main-site').style.display = 'block';
+            window.currentLang = lang;
+            const t = trans[lang];
+            document.getElementById('m-name').placeholder = t['m-n'];
+            document.getElementById('m-qty').placeholder = t['m-q'];
+            Object.keys(t).forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = t[id]; });
+            if(lang === 'hi') document.body.classList.add('hi-font');
+            initMap();
+        }
+
+        function initMap() {
+            if (!map) {
+                map = L.map('map', { zoomControl: false }).setView(shopCoords, 14);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+                L.marker(shopCoords).addTo(map).bindPopup("Kisan Dawa Ghar");
+                marker = L.marker(shopCoords, {draggable: true}).addTo(map);
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(p => {
+                        const userPos = [p.coords.latitude, p.coords.longitude];
+                        marker.setLatLng(userPos);
+                        map.setView(userPos, 14);
+                    });
+                }
+            }
+        }
+
+        function getLoc() {
+            const pos = marker.getLatLng();
+            return `https://www.google.com/maps?q=${pos.lat.toFixed(6)},${pos.lng.toFixed(6)}`;
+        }
+
+        function orderByName() {
+            const name = document.getElementById('m-name').value;
+            const qty = document.getElementById('m-qty').value || '1';
+            if(!name) return alert(window.currentLang === 'hi' ? "दवा का नाम लिखें" : "Enter medicine name");
+            const msg = `*NEW MEDICINE ORDER*\n\n💊 Medicine: ${name}\n📦 Qty: ${qty}\n📍 Location: ${getLoc()}\n🏪 Store: ${shopLink}`;
+            window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function orderByRx() {
+            const msg = `*NEW PRESCRIPTION ORDER*\n\n📸 I want to send a prescription photo.\n📍 Location: ${getLoc()}\n🏪 Store: ${shopLink}`;
+            window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        function orderRefill() {
+            const msg = `*MONTHLY REFILL REQUEST*\n\n🔄 I need my regular monthly medicines.\n📍 Delivery Location: ${getLoc()}\n🏪 Store: ${shopLink}`;
+            window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+</body>
+</html>
