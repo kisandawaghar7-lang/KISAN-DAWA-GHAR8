@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="hi">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#2563eb">
@@ -13,230 +12,306 @@
 
     <style>
         :root {
-            --primary: #2563eb;
-            --success: #16a34a;
-            --warning: #f59e0b;
-            --bg: #f1f5f9;
-            --surface: #ffffff;
-            --text-main: #0f172a;
-            --text-sub: #475569;
-            --refill: #7c3aed;
+            --primary: #2563eb; --success: #10b981; --warning: #f59e0b; --danger: #ef4444;
+            --bg: #f1f5f9; --text-main: #0f172a; --text-sub: #475569; --refill: #7c3aed;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg); color: var(--text-main); line-height: 1.6; padding-bottom: 120px; }
         .hi-font { font-family: 'Hind', sans-serif !important; }
 
-        .status-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.2); color: white; padding: 6px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 15px; backdrop-filter: blur(5px); }
-        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; position: relative; }
-        .pulse-dot::after { content: ""; position: absolute; width: 100%; height: 100%; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
-
-        .overlay { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 10000; }
-        .overlay-card { background: white; padding: 40px 30px; border-radius: 32px; text-align: center; width: 92%; max-width: 380px; }
-        .lang-btn { width: 100%; padding: 18px; border: 2px solid #e2e8f0; border-radius: 20px; background: white; color: var(--primary); font-weight: 800; font-size: 16px; margin-top: 15px; cursor: pointer; }
-
-        .medical-card { display: none; width: 100%; max-width: 500px; margin: 0 auto; background: var(--bg); min-height: 100vh; position: relative; padding-bottom: 40px; }
-        
         header { 
             background: linear-gradient(180deg, #3b82f6 0%, #2563eb 100%); 
             padding: 40px 20px 100px; text-align: center; color: white;
             border-bottom-left-radius: 50px; border-bottom-right-radius: 50px;
         }
-        header h1 { font-size: 26px; font-weight: 800; }
+        
+        .status-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255, 255, 255, 0.2); color: white; padding: 6px 15px; border-radius: 50px; font-size: 12px; font-weight: 700; margin-bottom: 15px; backdrop-filter: blur(10px); }
+        .pulse-dot { width: 8px; height: 8px; background: #4ade80; border-radius: 50%; position: relative; }
+        .pulse-dot::after { content: ""; position: absolute; width: 100%; height: 100%; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(3); opacity: 0; } }
 
         .trust-bar { 
             background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px);
             width: 90%; margin: -45px auto 25px; padding: 20px 10px;
             border-radius: 24px; display: flex; justify-content: space-around;
             font-size: 11px; font-weight: 700; color: var(--text-sub); 
-            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.1); z-index: 10; position: relative;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08); z-index: 10; position: relative;
         }
 
         .content { padding: 0 20px; }
-
-        .info-strip { background: #fffbeb; border: 1px solid #fde68a; padding: 12px 15px; border-radius: 18px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-        .info-strip i { color: var(--warning); font-size: 18px; }
-        .info-strip div { flex-grow: 1; margin-left: 12px; }
-        .info-strip b { font-size: 14px; color: #92400e; display: block; }
-        .info-strip span { font-size: 11px; color: #b45309; font-weight: 600; }
-
         .delivery-banner { background: #f0fdf4; border: 1px solid #22c55e; padding: 15px; border-radius: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-        .delivery-banner i { color: #22c55e; font-size: 20px; }
-        .delivery-banner b { display: block; font-size: 14px; color: #166534; }
-        .delivery-banner span { font-size: 11px; color: #15803d; font-weight: 600; }
 
-        .order-section { background: white; padding: 20px; border-radius: 24px; border: 1px solid #e2e8f0; margin-bottom: 15px; }
-        .section-title { font-size: 14px; font-weight: 800; color: var(--text-sub); margin-bottom: 15px; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 8px; }
+        .chip-container { display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .chip { background: white; padding: 10px 18px; border-radius: 50px; white-space: nowrap; font-size: 13px; font-weight: 700; color: var(--primary); box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #e2e8f0; flex-shrink: 0; }
+
+        .order-section { background: white; padding: 20px; border-radius: 28px; border: 1px solid white; margin-bottom: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+        .med-row { display: grid; grid-template-columns: 2.5fr 1fr 1fr 30px; gap: 8px; margin-bottom: 12px; align-items: center; }
+        .med-input { width: 100%; padding: 14px; border-radius: 14px; border: 1.5px solid #e2e8f0; font-size: 14px; outline: none; }
         
-        .input-row { display: grid; grid-template-columns: 2fr 1fr; gap: 10px; margin-bottom: 15px; }
-        .med-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-size: 14px; outline: none; }
+        .bill-details { background: #f8fafc; padding: 15px; border-radius: 18px; margin: 20px 0; border: 1px solid #e2e8f0; }
+        .bill-row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 14px; color: var(--text-sub); }
+        .bill-row.total { border-top: 1px dashed #cbd5e1; padding-top: 10px; margin-top: 10px; font-weight: 900; color: var(--primary); font-size: 18px; }
         
         .btn { width: 100%; padding: 18px; border-radius: 22px; font-weight: 800; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; transition: 0.3s; text-decoration: none; }
         .whatsapp-btn { background: var(--success); color: white; }
-        .rx-btn { background: #6366f1; color: white; }
-        .refill-btn { background: var(--refill); color: white; }
-        .help-btn { background: #f8fafc; border: 2px solid #3b82f6 !important; color: #1e40af; margin-top: 10px; }
 
-        #map { height: 180px; width: 100%; border-radius: 28px; margin: 20px 0; border: 1px solid #e2e8f0; }
-        footer { text-align: center; padding: 40px 20px; color: var(--text-sub); font-size: 12px; border-top: 1px solid #e2e8f0; }
+        .fab-whatsapp {
+            position: fixed; bottom: 25px; right: 25px; width: 65px; height: 65px;
+            background: #25d366; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center; color: white;
+            font-size: 32px; box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+            z-index: 9999; cursor: pointer; border: none;
+        }
+
+        #map { height: 200px; width: 100%; border-radius: 28px; margin: 20px 0; border: 4px solid white; }
+        
+        .legal-box { 
+            background: white; border-radius: 24px; padding: 25px; 
+            margin: 20px 0; font-size: 12px; color: var(--text-sub); text-align: left;
+            border: 1px solid #e2e8f0; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+        .legal-box h4 { font-size: 18px; color: var(--text-main); margin-bottom: 15px; font-weight: 700; }
+        .legal-box p { margin-bottom: 12px; line-height: 1.5; color: #475569; }
+        .legal-box b { color: var(--text-main); }
+
+        .overlay { position: fixed; inset: 0; background: var(--primary); display: flex; justify-content: center; align-items: center; z-index: 10000; }
     </style>
 </head>
-<body>
+<body id="body-tag">
+
+    <datalist id="med-suggestions">
+        <option value="Dolo 650">
+        <option value="Paracetamol">
+        <option value="Pan D">
+        <option value="Vicks Action 500">
+        <option value="Limcee 500mg">
+        <option value="Saridon">
+    </datalist>
 
     <div id="language-overlay" class="overlay">
-        <div class="overlay-card">
-            <h2 style="margin-bottom: 10px">KISAN DAWA GHAR</h2>
-            <button onclick="setLanguage('hi')" class="lang-btn hi-font">हिन्दी (Hindi)</button>
-            <button onclick="setLanguage('en')" class="lang-btn">English</button>
+        <div style="background:white; padding:40px; border-radius:35px; text-align:center; width:85%;">
+            <h2 style="margin-bottom:20px;">KISAN DAWA GHAR</h2>
+            <button onclick="setLanguage('hi')" class="btn whatsapp-btn hi-font" style="margin-bottom:15px">हिन्दी में शुरू करें</button>
+            <button onclick="setLanguage('en')" class="btn" style="background:#f1f5f9; color:var(--primary)">Continue in English</button>
         </div>
     </div>
 
-    <div id="main-site" class="medical-card">
+    <div id="main-site" style="display:none;">
         <header>
-            <div class="status-badge">
-                <span class="pulse-dot"></span> <span id="ds-pulse">Online Now</span>
-            </div>
-            <h1>KISAN DAWA GHAR</h1>
-            <p id="tagline" style="opacity:0.9; font-size: 14px;">Certified Pharmacy & Healthcare</p>
+            <div class="status-badge"><span id="live-dot" class="pulse-dot"></span> <span id="ds-pulse">Online Now</span></div>
+            <h1 id="main-title">KISAN DAWA GHAR</h1>
+            <p id="sub-title" style="opacity:0.9; font-size: 14px;">Certified Pharmacy & Healthcare</p>
         </header>
 
         <div class="trust-bar">
-            <span><i class="fas fa-certificate" style="color:#3b82f6"></i> <span id="t1">100% Genuine</span></span>
-            <span><i class="fas fa-truck" style="color:#f59e0b"></i> <span id="t2">Home Delivery</span></span>
+            <span id="t1"><i class="fas fa-certificate" style="color:#3b82f6"></i> 100% Genuine</span>
+            <span id="t2"><i class="fas fa-truck" style="color:#f59e0b"></i> Home Delivery</span>
         </div>
 
         <div class="content">
-            
-            <div class="info-strip">
-                <i class="fas fa-shopping-basket"></i>
-                <div><b id="min-label">Minimum Order: ₹299</b><span id="min-sub">+ Delivery Charge Applicable</span></div>
-            </div>
-
             <div class="delivery-banner">
-                <i class="fas fa-truck-loading"></i>
-                <div><b id="fd-msg">FREE Delivery Offer</b><span id="fd-sub">Applicable on orders above ₹999</span></div>
+                <i class="fas fa-truck-loading" style="color:#22c55e; font-size: 22px;"></i>
+                <div><b id="free-del-text">FREE Delivery Offer</b><br><span id="above-999-text" style="font-size: 11px;">On orders above ₹999</span></div>
             </div>
 
+            <div class="chip-container" id="chips"></div>
+
             <div class="order-section">
-                <div class="section-title"><i class="fas fa-pen-nib"></i> <span id="s1-title">Order by Name</span></div>
-                <div class="input-row">
-                    <input type="text" id="m-name" class="med-input" placeholder="Medicine Name">
-                    <input type="text" id="m-qty" class="med-input" placeholder="Qty">
+                <div id="add-med-title" style="font-size:13px; font-weight:800; color:var(--text-sub); margin-bottom:15px;"><i class="fas fa-list"></i> ADD MEDICINES</div>
+                <div id="med-list"></div>
+                <button onclick="addRow()" id="add-more-btn" class="btn" style="background:#f8fafc; color:var(--primary); border:2px dashed #cbd5e1; margin-bottom:15px; height:50px">+ Add More</button>
+                
+                <div class="bill-details">
+                    <div class="bill-row">
+                        <span id="items-total-label">Items Total:</span>
+                        <span id="bill-items-total">₹0</span>
+                    </div>
+                    <div class="bill-row">
+                        <span id="delivery-label">Delivery Charge:</span>
+                        <span id="bill-delivery-charge">₹40</span>
+                    </div>
+                    <div class="bill-row total">
+                        <span id="grand-total-label">Final Amount:</span>
+                        <span id="bill-grand-total">₹40</span>
+                    </div>
+                    <div id="del-alert" style="font-size:10px; font-weight:700; text-align:right; margin-top:5px;"></div>
                 </div>
-                <button onclick="orderByName()" class="btn whatsapp-btn">
-                    <i class="fab fa-whatsapp"></i> <span id="btn-n">Order Now</span>
+
+                <button id="main-order-btn" onclick="orderByName()" class="btn whatsapp-btn">
+                    <i class="fab fa-whatsapp"></i> <span id="btn-n-text">Order All Items</span>
                 </button>
             </div>
 
             <div class="order-section">
-                <div class="section-title"><i class="fas fa-file-medical"></i> <span id="s2-title">Order by Prescription</span></div>
-                <button onclick="orderByRx()" class="btn rx-btn">
-                    <i class="fab fa-whatsapp"></i> <span id="btn-rx">Send Prescription</span>
-                </button>
+                <button onclick="orderByRx()" id="rx-btn" class="btn" style="background:#6366f1; color:white; margin-bottom:12px;"><i class="fab fa-whatsapp"></i> Send Prescription</button>
+                <button onclick="orderRefill()" id="refill-btn" class="btn" style="background:var(--refill); color:white;"><i class="fas fa-sync-alt"></i> Order Monthly Refill</button>
             </div>
 
-            <div class="order-section">
-                <div class="section-title"><i class="fas fa-calendar-alt"></i> <span id="s3-title">Monthly Refill</span></div>
-                <button onclick="orderRefill()" class="btn refill-btn">
-                    <i class="fas fa-sync-alt"></i> <span id="btn-refill">Order Monthly Refill</span>
-                </button>
-            </div>
-
-            <a href="tel:+918005135353" class="btn help-btn">
-                <i class="fas fa-user-md"></i> <span id="btn-help">Help Ordering: Call Pharmacist</span>
+            <a href="tel:+918005135353" id="help-btn" class="btn" style="background:white; border:2.5px solid var(--primary); color:var(--primary); margin-bottom:15px;">
+                <i class="fas fa-user-md"></i> Help Ordering: Call Pharmacist
             </a>
 
             <div id="map"></div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                <a href="tel:+918005135353" id="call-btn" class="btn" style="background: var(--primary); color: white;"><i class="fas fa-phone-alt"></i> Call Store</a>
+                <a href="http://googleusercontent.com/maps.google.com/6" id="route-btn" target="_blank" class="btn" style="background: white; border: 2px solid var(--primary); color: var(--primary);"><i class="fas fa-map-marker-alt"></i> Get Route</a>
+            </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px;">
-                <a href="tel:+918005135353" class="btn" style="background: var(--primary); color: white;"><i class="fas fa-phone-alt"></i> Call</a>
-                <a href="https://maps.app.goo.gl/DxZPygrPVfeR9p167" target="_blank" class="btn" style="background: white; border: 2px solid var(--primary); color: var(--primary);"><i class="fas fa-map-marker-alt"></i> Route</a>
+            <div class="legal-box" id="legal-content">
+                <h4>Privacy Policy & Terms</h4>
+                <p><b>1. Prescription Policy:</b> As per Indian Law (Drugs and Cosmetics Act), medicines listed under Schedule H, H1, or X will <b>only</b> be dispensed upon verification of a valid prescription via WhatsApp.</p>
+                <p><b>2. Data Usage:</b> We collect your location, name, and order list solely for delivery purposes. We do not store, sell, or share your medical data with third parties.</p>
+                <p><b>3. Billing:</b> Prices shown are estimates based on standard MRP. Final taxes (GST) and delivery charges will be calculated on the physical invoice provided at delivery.</p>
+                <p><b>4. Medical Disclaimer:</b> This website is for ordering assistance only. We do not provide medical diagnosis or emergency treatment. For emergencies, visit a doctor immediately.</p>
             </div>
         </div>
 
-        <footer>
-            <p><strong>KISAN DAWA GHAR</strong></p>
+        <button onclick="orderByRx()" class="fab-whatsapp"><i class="fab fa-whatsapp"></i></button>
+        
+        <footer style="text-align:center; padding: 20px; color:var(--text-sub); font-size:12px;">
+            <p><b>KISAN DAWA GHAR</b></p>
             <p>Partawal Chowk, Maharajganj, UP</p>
         </footer>
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        let map, marker;
-        const shopPhone = "918005135353";
-        const shopCoords = [26.9697, 83.4754]; 
-        const shopLink = "https://maps.app.goo.gl/DxZPygrPVfeR9p167";
+        let map, marker, currentLang = 'en';
+        
+        const priceList = { 
+            "dolo 650": 32, "paracetamol": 25, "pan d": 190, "vicks action 500": 55, "limcee 500mg": 30,
+            "fever - 1 day dose": 40, "acidity - 1 day dose": 35, "cold - 1 day dose": 45, 
+            "loose motion - 1 day dose": 50, "body pain - 1 day dose": 60, "stomach pain - 1 day dose": 55,
+            "बुखार - 1 दिन की दवा": 40, "गैस - 1 दिन की दवा": 35, "सर्दी - 1 दिन की दवा": 45, 
+            "दस्त - 1 दिन की दवा": 50, "बदन दर्द - 1 दिन की दवा": 60, "पेट दर्द - 1 दिन की दवा": 55
+        };
 
-        const trans = {
-            'en': {
-                'ds-pulse': 'Online Now', 'tagline': 'Certified Pharmacy & Healthcare',
-                'min-label': 'Minimum Order: ₹299', 'min-sub': '+ Delivery Charge Applicable',
-                's1-title': 'Order by Name', 's2-title': 'Order by Prescription', 's3-title': 'Monthly Refill',
-                'btn-n': 'Order Now', 'btn-rx': 'Send Prescription', 'btn-refill': 'Order Monthly Refill',
-                'btn-help': 'Help Ordering: Call Pharmacist',
-                'fd-msg': 'FREE Delivery Offer', 'm-n': 'Medicine Name', 'm-q': 'Qty'
+        const translations = {
+            hi: {
+                title: "किसान दवा घर", subtitle: "प्रमाणित फार्मेसी और स्वास्थ्य सेवा",
+                t1: "100% असली", t2: "होम डिलीवरी", freeDel: "फ्री डिलीवरी ऑफर", above999: "₹999 से ऊपर के ऑर्डर पर",
+                addMed: "दवाएं जोड़ें", addMore: "+ और दवा जोड़ें", itemsTotal: "दवाओं का कुल:",
+                deliveryCharge: "डिलीवरी शुल्क:", finalTotal: "कुल देय राशि:",
+                placeOrder: "ऑर्डर व्हाट्सएप करें", rxOrder: "पर्चा भेजें", refill: "मंथली रिफिल",
+                help: "मदद के लिए कॉल करें", call: "कॉल करें", route: "रास्ता", freeDelAlert: "₹999 से ऊपर फ्री डिलीवरी",
+                freeDelSuccess: "बधाई! आपकी डिलीवरी फ्री है"
             },
-            'hi': {
-                'ds-pulse': 'अभी ऑनलाइन है', 'tagline': 'प्रमाणित फार्मेसी और हेल्थकेयर',
-                'min-label': 'न्यूनतम ऑर्डर: ₹299', 'min-sub': '+ डिलीवरी शुल्क लागू',
-                's1-title': 'नाम से ऑर्डर करें', 's2-title': 'पर्चे से ऑर्डर करें', 's3-title': 'मंथली रिफिल',
-                'btn-n': 'अभी ऑर्डर करें', 'btn-rx': 'पर्चा भेजें', 'btn-refill': 'मंथली रिफिल ऑर्डर करें',
-                'btn-help': 'ऑर्डर सहायता: फार्मासिस्ट को कॉल करें',
-                'fd-msg': 'फ्री डिलीवरी ऑफर', 'm-n': 'दवा का नाम', 'm-q': 'मात्रा'
+            en: {
+                title: "KISAN DAWA GHAR", subtitle: "Certified Pharmacy & Healthcare",
+                t1: "100% Genuine", t2: "Home Delivery", freeDel: "FREE Delivery Offer", above999: "On orders above ₹999",
+                addMed: "ADD MEDICINES", addMore: "+ Add More", itemsTotal: "Items Total:",
+                deliveryCharge: "Delivery Charge:", finalTotal: "Final Amount:",
+                placeOrder: "Send Order on WhatsApp", rxOrder: "Send Prescription", refill: "Monthly Refill",
+                help: "Call Pharmacist", call: "Call Store", route: "Get Route", freeDelAlert: "Add more for FREE delivery",
+                freeDelSuccess: "Congrats! FREE Delivery applied"
             }
         };
 
         function setLanguage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
             document.getElementById('language-overlay').style.display = 'none';
             document.getElementById('main-site').style.display = 'block';
-            window.currentLang = lang;
-            const t = trans[lang];
-            document.getElementById('m-name').placeholder = t['m-n'];
-            document.getElementById('m-qty').placeholder = t['m-q'];
-            Object.keys(t).forEach(id => { if(document.getElementById(id)) document.getElementById(id).innerText = t[id]; });
-            if(lang === 'hi') document.body.classList.add('hi-font');
-            initMap();
+            
+            document.getElementById('main-title').innerText = t.title;
+            document.getElementById('sub-title').innerText = t.subtitle;
+            document.getElementById('free-del-text').innerText = t.freeDel;
+            document.getElementById('above-999-text').innerText = t.above999;
+            document.getElementById('add-med-title').innerHTML = `<i class="fas fa-list"></i> ${t.addMed}`;
+            document.getElementById('add-more-btn').innerText = t.addMore;
+            document.getElementById('items-total-label').innerText = t.itemsTotal;
+            document.getElementById('delivery-label').innerText = t.deliveryCharge;
+            document.getElementById('grand-total-label').innerText = t.finalTotal;
+            document.getElementById('btn-n-text').innerText = t.placeOrder;
+            document.getElementById('rx-btn').innerText = t.rxOrder;
+            document.getElementById('refill-btn').innerText = t.refill;
+            document.getElementById('help-btn').innerHTML = `<i class="fas fa-user-md"></i> ${t.help}`;
+            document.getElementById('call-btn').innerHTML = `<i class="fas fa-phone-alt"></i> ${t.call}`;
+            document.getElementById('route-btn').innerHTML = `<i class="fas fa-map-marker-alt"></i> ${t.route}`;
+
+            const chips = lang === 'hi' ? 
+                ["💊 बुखार - 1 दिन की दवा", "🧪 गैस - 1 दिन की दवा", "🤧 सर्दी - 1 दिन की दवा", "🏃 दस्त - 1 दिन की दवा", "💪 बदन दर्द - 1 दिन की दवा", "😫 पेट दर्द - 1 दिन की दवा"] : 
+                ["💊 Fever - 1 Day Dose", "🧪 Acidity - 1 Day Dose", "🤧 Cold - 1 Day Dose", "🏃 Loose Motion - 1 Day Dose", "💪 Body Pain - 1 Day Dose", "😫 Stomach Pain - 1 Day Dose"];
+            
+            const chipBox = document.getElementById('chips');
+            chipBox.innerHTML = '';
+            chips.forEach(c => {
+                const div = document.createElement('div');
+                div.className = 'chip';
+                div.innerText = c;
+                div.onclick = () => addRow(c.split(' ').slice(1).join(' '));
+                chipBox.appendChild(div);
+            });
+
+            if(!map) { addRow(); initMap(); }
+            calculate();
         }
 
-        function initMap() {
-            if (!map) {
-                map = L.map('map', { zoomControl: false }).setView(shopCoords, 14);
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-                L.marker(shopCoords).addTo(map).bindPopup("Kisan Dawa Ghar");
-                marker = L.marker(shopCoords, {draggable: true}).addTo(map);
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(p => {
-                        const userPos = [p.coords.latitude, p.coords.longitude];
-                        marker.setLatLng(userPos);
-                        map.setView(userPos, 14);
-                    });
-                }
+        function addRow(prefill = "") {
+            const list = document.getElementById('med-list');
+            const row = document.createElement('div');
+            row.className = 'med-row';
+            row.innerHTML = `
+                <input type="text" list="med-suggestions" class="med-input m-name" value="${prefill}" placeholder="Medicine Name" oninput="calculate()">
+                <input type="number" class="med-input m-qty" value="1" min="1" oninput="calculate()">
+                <div style="font-size:12px; font-weight:800; color:var(--primary); text-align:center">₹<span class="m-price">0</span></div>
+                <button style="border:none; background:none; color:red; font-size:22px" onclick="this.parentElement.remove(); calculate()">×</button>
+            `;
+            list.appendChild(row); calculate();
+        }
+
+        function calculate() {
+            let itemsTotal = 0;
+            document.querySelectorAll('.med-row').forEach(row => {
+                const name = row.querySelector('.m-name').value.toLowerCase().trim();
+                const qty = parseInt(row.querySelector('.m-qty').value) || 0;
+                let rowTotal = (priceList[name] || 0) * qty;
+                row.querySelector('.m-price').innerText = rowTotal;
+                itemsTotal += rowTotal;
+            });
+
+            let delCharge = (itemsTotal >= 999 || itemsTotal === 0) ? 0 : 40;
+            let finalTotal = itemsTotal + delCharge;
+
+            document.getElementById('bill-items-total').innerText = "₹" + itemsTotal;
+            document.getElementById('bill-delivery-charge').innerText = delCharge === 0 ? (itemsTotal === 0 ? "₹0" : "FREE") : "₹" + delCharge;
+            document.getElementById('bill-delivery-charge').style.color = delCharge === 0 && itemsTotal > 0 ? "var(--success)" : "var(--danger)";
+            document.getElementById('bill-grand-total').innerText = "₹" + finalTotal;
+
+            const alertBox = document.getElementById('del-alert');
+            const t = translations[currentLang];
+            if (itemsTotal > 0 && itemsTotal < 999) {
+                alertBox.innerText = t.freeDelAlert;
+                alertBox.style.color = "var(--warning)";
+            } else if (itemsTotal >= 999) {
+                alertBox.innerText = t.freeDelSuccess;
+                alertBox.style.color = "var(--success)";
+            } else {
+                alertBox.innerText = "";
             }
         }
 
-        function getLoc() {
-            const pos = marker.getLatLng();
-            return `https://www.google.com/maps?q=${pos.lat.toFixed(6)},${pos.lng.toFixed(6)}`;
+        function initMap() {
+            map = L.map('map', { zoomControl: false }).setView([26.9697, 83.4754], 14);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            marker = L.marker([26.9697, 83.4754], {draggable: true}).addTo(map);
         }
 
         function orderByName() {
-            const name = document.getElementById('m-name').value;
-            const qty = document.getElementById('m-qty').value || '1';
-            if(!name) return alert(window.currentLang === 'hi' ? "दवा का नाम लिखें" : "Enter medicine name");
-            const msg = `*NEW MEDICINE ORDER*\n\n💊 Medicine: ${name}\n📦 Qty: ${qty}\n📍 Location: ${getLoc()}\n🏪 Store: ${shopLink}`;
-            window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+            let meds = "";
+            document.querySelectorAll('.med-row').forEach(row => {
+                const n = row.querySelector('.m-name').value;
+                const q = row.querySelector('.m-qty').value;
+                if(n) meds += `• ${n} (${q})\n`;
+            });
+            const latlng = marker.getLatLng();
+            const msg = `*NEW ORDER*\n\n${meds}\n💊 Items: ${document.getElementById('bill-items-total').innerText}\n🚚 Delivery: ${document.getElementById('bill-delivery-charge').innerText}\n💰 *Final Total: ${document.getElementById('bill-grand-total').innerText}*\n📍 Location: http://googleusercontent.com/maps.google.com/6{latlng.lat},${latlng.lng}`;
+            window.open(`https://wa.me/918005135353?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        function orderByRx() {
-            const msg = `*NEW PRESCRIPTION ORDER*\n\n📸 I want to send a prescription photo.\n📍 Location: ${getLoc()}\n🏪 Store: ${shopLink}`;
-            window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
-
-        function orderRefill() {
-            const msg = `*MONTHLY REFILL REQUEST*\n\n🔄 I need my regular monthly medicines.\n📍 Delivery Location: ${getLoc()}\n🏪 Store: ${shopLink}`;
-            window.open(`https://wa.me/${shopPhone}?text=${encodeURIComponent(msg)}`, '_blank');
-        }
+        function orderByRx() { window.open(`https://wa.me/918005135353?text=I want to order via prescription`, '_blank'); }
+        function orderRefill() { window.open(`https://wa.me/918005135353?text=Monthly Refill Request`, '_blank'); }
     </script>
 </body>
 </html>
